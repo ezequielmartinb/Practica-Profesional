@@ -1,0 +1,9 @@
+// For information on how to create your own theme, please see:
+// http://ionicframework.com/docs/theming/
+:root {
+    --bottom-safe-area: env(safe-area-inset-bottom);
+  }
+  .footer {
+    padding-bottom: var(--bottom-safe-area);
+  }
+  
