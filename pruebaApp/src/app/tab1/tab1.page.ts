@@ -3,6 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { createClient } from '@supabase/supabase-js';
 import { environment } from 'src/environments/environment.prod';
+import { Preferences } from '@capacitor/preferences';
+
 
 const supabase = createClient(environment.apiUrl, environment.publicAnonKey);
 
@@ -24,32 +26,38 @@ export class Tab1Page {
 
   constructor(private router:Router) {}
 
-  submit() 
-  {
+  async submit() {
     const { email, password } = this.form.getRawValue();
-
-    supabase
-      .from('usuarios')
-      .select('*')
-      .eq('correo', email)
-      .single()
-      .then(({ data, error }) => {
-        if (error || !data) 
-        {
-          this.errorMessage = 'Usuario no encontrado'
-          return;
-        }
-        // ⚠️ Comparación insegura (solo para pruebas)
-        if (data.contraseña === password) 
-        {
-          this.router.navigate(['/tabs/tab2']);
-        } 
-        else 
-        {
-          this.errorMessage = 'Contraseña incorrecta';
-        }
-      });
+  
+    try {
+      const { data, error } = await supabase
+        .from('usuarios')
+        .select('*')
+        .eq('correo', email)
+        .single();
+  
+      if (error || !data) {
+        this.errorMessage = 'Usuario no encontrado';
+        return;
+      }
+  
+      // ⚠️ Comparación insegura (solo para pruebas)
+      if (data.contraseña === password) {
+        await Preferences.set({
+          key: 'email',
+          value: email ?? '',
+        });
+  
+        this.router.navigate(['/tabs/home']);
+      } else {
+        this.errorMessage = 'Contraseña incorrecta';
+      }
+    } catch (err) {
+      this.errorMessage = 'Error al conectar con el servidor';
+      console.error(err);
+    }
   }
+  
 }
 
 

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Preferences } from '@capacitor/preferences';
 
 @Component({
   selector: 'app-tab2',
@@ -8,11 +9,15 @@ import { Component } from '@angular/core';
 })
 export class Tab2Page {
 
-  usuario: string | null;
+  usuario: string = '';
 
-  constructor() {
-    this.usuario = localStorage.getItem('usuario');
+  async ngOnInit() {
+    const { value } = await Preferences.get({ key: 'email' });
+    if (value) {
+      this.usuario = value;
+    }
   }
+
 
 
 }
