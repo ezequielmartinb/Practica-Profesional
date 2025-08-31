@@ -1,4 +1,4 @@
-<app-header title="Iniciar sesión"></app-header>
+<app-header title="Regístrate"></app-header>
 <ion-content>
   <div class="d-flex-center">
     <form [formGroup]="form" class="auth-form" (ngSubmit)="submit()" (keypress.enter)="submit()">
@@ -12,8 +12,8 @@
       label="Correo electrónico"
       ></app-custom-input>
       <div class="d-flex-left" *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
-        <small class="error-msg" *ngIf="form.get('email')?.errors?.['required']">⚠ Debes ingresar un email.</small>
-        <small class="error-msg" *ngIf="form.get('email')?.errors?.['email']">⚠ El formato del email es incorrecto.</small>
+        <small class="error-msg" *ngIf="form.get('email')?.errors?.['required']">⚠ Debes ingresar un correo.</small>
+        <small class="error-msg" *ngIf="form.get('email')?.errors?.['email']">⚠ El formato del correo es incorrecto.</small>
       </div>
       <!-- INPUT CONTRASEÑA -->
       <app-custom-input 
@@ -23,8 +23,18 @@
       type="password"
       label="Contraseña"></app-custom-input>
       <div class="d-flex-left" *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
-        <small class="error-msg" *ngIf="form.get('password')?.errors?.['required']">⚠ Debes ingresar un password.</small>
+        <small class="error-msg" *ngIf="form.get('password')?.errors?.['required']">⚠ Debes ingresar una contraseña.</small>
         <small class="error-msg" *ngIf="form.get('password')?.errors?.['minlength']">⚠ La contraseña debe tener al menos 6 caracteres.</small>
+      </div>
+      <app-custom-input 
+      autocomplete="password2"
+      icon="lock-closed-outline"    
+      [control]="form.controls.password2"
+      type="password"
+      label="Reingrese contraseña"></app-custom-input>
+      <div class="d-flex-left" *ngIf="form.get('password2')?.invalid && form.get('password2')?.touched">
+        <small class="error-msg" *ngIf="form.get('password2')?.errors?.['required']">⚠ Debes ingresar una contraseña.</small>
+        <small class="error-msg" *ngIf="form.get('password2')?.errors?.['minlength']">⚠ La contraseña debe tener al menos 6 caracteres.</small>
       </div>
       <ion-button expand="block" mode="ios" class="submit" type="submit" [disabled]="form.invalid">
         Iniciar sesión

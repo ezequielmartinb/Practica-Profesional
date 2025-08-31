@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from './servicios/auth-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -11,10 +12,18 @@ export class AppComponent {
   
   usuario: string | null = null;
 
-  constructor(private auth:AuthService) {}
+  constructor(private auth:AuthService, private router: Router) 
+  {}
+  
   ngOnInit() {
     this.auth.usuario$.subscribe(email => {
       this.usuario = email;
     });   
   }
+  
+  logout() {
+    this.auth.logout();
+    this.router.navigate(['/login']);
+  }
+
 }

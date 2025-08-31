@@ -41,7 +41,7 @@ export class LoginPage {
       console.log("Email: ", email);
       console.log("password: ", password);
       
-      const { data, error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password
       });   
