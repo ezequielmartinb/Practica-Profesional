@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from './servicios/auth-service';
 import { Router } from '@angular/router';
+import { StatusBar, Style } from '@capacitor/status-bar';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,14 @@ export class AppComponent {
   usuario: string | null = null;
 
   constructor(private auth:AuthService, private router: Router) 
-  {}
+  {
+    this.configureStatusBar();
+  }
+
+  async configureStatusBar() {
+    await StatusBar.setOverlaysWebView({ overlay: false });
+  }
+  
   
   ngOnInit() {
     this.auth.usuario$.subscribe(email => {

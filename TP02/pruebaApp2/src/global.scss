@@ -39,7 +39,11 @@
 ion-button {
     text-transform: none;
 }
-
+ion-content {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
 // safe padding for ios
 .safe-p-bottom{
     padding-bottom: constant(safe-area-inset-bottom); // for ios 13+
