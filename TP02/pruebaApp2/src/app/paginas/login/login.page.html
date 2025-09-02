@@ -1,36 +1,55 @@
 <app-header title="Iniciar sesión"></app-header>
+
 <ion-content>
   <div class="d-flex-center">
     <form [formGroup]="form" class="auth-form" (ngSubmit)="submit()" (keypress.enter)="submit()">
       <app-logo></app-logo>
+
       <!-- INPUT MAIL -->
       <app-custom-input 
-      autocomplete="email"
-      icon="mail-outline"
-      [control]="form.controls.email"
-      type="email"
-      label="Correo electrónico"
-      ></app-custom-input>
+        autocomplete="email"
+        icon="mail-outline"
+        [control]="form.controls.email"
+        type="email"
+        label="Correo electrónico">
+      </app-custom-input>
+
       <div class="d-flex-left" *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
         <small class="error-msg" *ngIf="form.get('email')?.errors?.['required']">⚠ Debes ingresar un correo.</small>
         <small class="error-msg" *ngIf="form.get('email')?.errors?.['email']">⚠ El formato del correo es incorrecto.</small>
       </div>
+
       <!-- INPUT CONTRASEÑA -->
       <app-custom-input 
-      autocomplete="password"
-      icon="lock-closed-outline"    
-      [control]="form.controls.password"
-      type="password"
-      label="Contraseña"></app-custom-input>
+        autocomplete="password"
+        icon="lock-closed-outline"
+        [control]="form.controls.password"
+        type="password"
+        label="Contraseña">
+      </app-custom-input>
+
       <div class="d-flex-left" *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
         <small class="error-msg" *ngIf="form.get('password')?.errors?.['required']">⚠ Debes ingresar una contraseña.</small>
         <small class="error-msg" *ngIf="form.get('password')?.errors?.['minlength']">⚠ La contraseña debe tener al menos 6 caracteres.</small>
       </div>
+
+      <!-- BOTÓN DE LOGIN -->
       <ion-button expand="block" mode="ios" class="submit" type="submit" [disabled]="form.invalid">
         Iniciar sesión
         <ion-icon slot="end" name="log-in-outline"></ion-icon>
       </ion-button>
+
+      <!-- BOTONES DE INICIO RÁPIDO DINÁMICOS -->
+      <div class="quick-login" *ngIf="usuariosDemo.length > 0">
+        <ion-button
+          *ngFor="let usuario of usuariosDemo"
+          expand="block"
+          fill="outline"
+          (click)="loginRapido(usuario['correo'])">
+          {{ usuario['correo'] }}
+          <ion-icon slot="end" name="log-in-outline"></ion-icon>
+        </ion-button>
+      </div>
     </form>
   </div>
 </ion-content>
-
