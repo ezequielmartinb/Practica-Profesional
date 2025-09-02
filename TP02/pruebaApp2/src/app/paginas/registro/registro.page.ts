@@ -68,7 +68,7 @@ export class RegistroPage {
   
       if (error) {
         if (error.message.includes('User already registered')) {
-          await this.showToast('⚠ Este correo ya está registrado.')
+          await this.showToast('⚠ Este correo ya está registrado.');
         } else {
           this.errorMessage = '⚠ Error al registrar: ' + error.message;
         }

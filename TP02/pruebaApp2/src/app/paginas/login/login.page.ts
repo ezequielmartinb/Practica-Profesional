@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastController } from '@ionic/angular';
 import { createClient } from '@supabase/supabase-js';
 import { AuthService } from 'src/app/servicios/auth-service';
 import { environment } from 'src/environments/environment.prod';
@@ -24,7 +25,18 @@ export class LoginPage {
   );
   errorMessage:string = "";
 
-  constructor(private router:Router, private authService: AuthService) {}
+  constructor(private router:Router, private authService: AuthService, private toastController: ToastController) {}
+
+  async showToast(message: string, color: 'danger' | 'success' = 'danger') {
+    const toast = await this.toastController.create({
+      message,
+      duration: 3000,
+      position: 'top',
+      color,
+      animated: true
+    });
+    await toast.present();
+  }
 
   async submit() {
     const { email, password } = this.form.getRawValue();
@@ -47,9 +59,8 @@ export class LoginPage {
       });   
   
       if (error || !data?.user) {
-        this.errorMessage = 'Credenciales inválidas';      
-        console.log(error);
-        
+        await this.showToast('⚠ Credenciales inválidas.')
+        console.log(error);        
         return;
       }  
       // Usuario autenticado correctamente     
