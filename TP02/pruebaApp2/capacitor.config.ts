@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.emb.app',
-  appName: 'Brañanova Ezequiel Martín',
+  appName: 'PruebaApp',
   webDir: 'www',
   plugins:
   {
