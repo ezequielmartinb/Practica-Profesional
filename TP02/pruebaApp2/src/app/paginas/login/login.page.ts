@@ -23,6 +23,9 @@ export class LoginPage {
 
   errorMessage: string = '';
   usuariosDemo: any[] = [];
+  isLoading:boolean = false;
+  isLoadingUsuarios:boolean = false;
+  
 
   constructor(
     private router: Router,
@@ -66,6 +69,7 @@ export class LoginPage {
   async submit() {
     const { email, password } = this.form.getRawValue();
     const loader = await this.presentLoader('Iniciando sesión...');
+    this.isLoading = true;
 
     try {
       if (!email || !password) {
@@ -127,6 +131,8 @@ export class LoginPage {
   }
 
   async cargarUsuariosDemo() {
+    this.isLoadingUsuarios = true;
+
     const { data, error } = await supabase
       .from('usuarios')
       .select('correo, "contraseña"') // comillas para evitar error de parser
@@ -143,6 +149,8 @@ export class LoginPage {
     );
 
     this.usuariosDemo = correosUnicos;
+    this.isLoadingUsuarios = false;
+
   }
 
 }

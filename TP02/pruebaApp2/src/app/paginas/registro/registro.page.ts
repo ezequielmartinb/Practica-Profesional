@@ -5,7 +5,7 @@ import { createClient } from '@supabase/supabase-js';
 import { AuthService } from 'src/app/servicios/auth-service';
 import { environment } from 'src/environments/environment.prod';
 import { passwordMatchValidator } from 'src/app/validators/password-match.validator';
-import { ToastController } from '@ionic/angular';
+import { LoadingController, ToastController } from '@ionic/angular';
 
 const supabase = createClient(environment.apiUrl, environment.publicAnonKey);
 
@@ -21,7 +21,7 @@ export class RegistroPage {
   form: FormGroup;
   errorMessage:string = "";
 
-  constructor(private router:Router, private authService: AuthService, private toastController: ToastController) 
+  constructor(private router:Router, private authService: AuthService, private toastController: ToastController,  private loadingController: LoadingController) 
   {
     this.form = new FormGroup(
       {
@@ -43,6 +43,19 @@ export class RegistroPage {
   get password2Control(): FormControl {
     return this.form.get('password2') as FormControl;
   }
+  async presentLoader(message: string = 'Cargando...') {
+    const loader = await this.loadingController.create({
+      message,
+      spinner: 'crescent',           // válido
+      cssClass: 'custom-loader',     // estilos opcionales abajo
+      showBackdrop: true,            // en lugar de translucent
+      backdropDismiss: false,
+      // duration: 10000,            // opcional; mejor manejar manualmente el dismiss
+      mode: 'ios'
+    });
+    await loader.present();
+    return loader; // HTMLIonLoadingElement
+  }
 
   async showToast(message: string, color: 'danger' | 'success' = 'danger') {
     const toast = await this.toastController.create({
@@ -58,10 +71,9 @@ export class RegistroPage {
 
   async submit() {
     if (this.form.invalid) return;
-    
-
   
     const { email, password } = this.form.value;
+    const loader = await this.presentLoader('Registrando usuario...');
   
     try {
       const { data, error } = await supabase.auth.signUp({ email, password });
@@ -77,16 +89,13 @@ export class RegistroPage {
   
       const user = data.user;
       if (user) {
-        // Insertar en la tabla personalizada
         const { error: dbError } = await supabase
           .from('usuarios')
-          .insert([
-            {
-              authId: user.id,  
-              correo: email,
-              contraseña: password   
-            }
-          ]);
+          .insert([{
+            authId: user.id,
+            correo: email,
+            contraseña: password
+          }]);
   
         if (dbError) {
           this.errorMessage = '⚠ Error al guardar en la base de datos: ' + dbError.message;
@@ -94,17 +103,16 @@ export class RegistroPage {
         }
   
         this.errorMessage = '';
-        console.log('Usuario registrado en DB:', user);
         await this.showToast('✅ ¡Registro exitoso!', 'success');
-
-        // Redirigir después del toast
-        setTimeout(() => {
-          this.router.navigate(['/login']);
-        }, 3000);
+  
+        setTimeout(() => this.router.navigate(['/login']));
       }
     } catch (err) {
       this.errorMessage = '⚠ Error inesperado.';
       console.error(err);
+    } finally {
+      // Cerrá el loader aunque haya errores o navegues
+      try { await loader.dismiss(); } catch {}
     }
   }
 

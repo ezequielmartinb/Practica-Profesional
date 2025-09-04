@@ -40,15 +40,21 @@
       </ion-button>
 
       <!-- BOTONES DE INICIO RÁPIDO DINÁMICOS -->
-      <div class="quick-login" *ngIf="usuariosDemo.length > 0">
-        <ion-button
-          *ngFor="let usuario of usuariosDemo"
-          expand="block"
-          fill="outline"
-          (click)="loginRapido(usuario['correo'])">
-          {{ usuario['correo'] }}
-          <ion-icon slot="end" name="log-in-outline"></ion-icon>
-        </ion-button>
+      <div *ngIf="isLoadingUsuarios" class="overlay">
+        <div class="spinner"></div>
+        <p>Cargando...</p>
+      </div>
+      <div *ngIf="!isLoadingUsuarios">
+        <div class="quick-login" *ngIf="usuariosDemo.length > 0">
+          <ion-button
+            *ngFor="let usuario of usuariosDemo | slice:0:3"
+            expand="block"
+            fill="outline"
+            (click)="loginRapido(usuario['correo'])">
+            {{ usuario['correo'] }}
+            <ion-icon slot="end" name="log-in-outline"></ion-icon>
+          </ion-button>
+        </div>
       </div>
     </form>
   </div>
