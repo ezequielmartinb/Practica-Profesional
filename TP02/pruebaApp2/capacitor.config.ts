@@ -5,29 +5,16 @@ const config: CapacitorConfig = {
   appName: 'PruebaApp',
   webDir: 'www',
   plugins:
-  {
-    
-    SplashScreen: {
-      launchShowDuration: 0,
-      launchAutoHide: true,
-      launchFadeOutDuration: 3000,
-      backgroundColor: "#ffffffff",
-      androidSplashResourceName: "splash",
-      androidScaleType: "CENTER_CROP",
-      showSpinner: true,
-      androidSpinnerStyle: "large",
-      iosSpinnerStyle: "small",
-      spinnerColor: "#999999",
-      splashFullScreen: false,
-      splashImmersive: false,
-      layoutName: "launch_screen",
-      useDialog: false
-    },  
-    StatusBar:
-    {
-      overlaysWebView: false,
-      backgroundColor: '#ffffff', // fondo blanco para la barra
+  {  
+    StatusBar: {
+      overlaysWebView: false, // 👈 evita que el contenido se meta debajo de la barra
       style: 'DARK',          // texto oscuro (ideal si el fondo es claro)
+      backgroundColor: '#ffffff', // fondo blanco para la barra
+    },  
+    SplashScreen: {
+      backgroundColor: "#1e3c72",
+      showSpinner: false,
+      launchShowDuration: 3000
     }
   }
 

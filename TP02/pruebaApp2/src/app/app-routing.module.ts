@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { SplashScreenComponent } from './components/splash-screen/splash-screen.component';
 
 const routes: Routes = [
+  { 
+    path: '', 
+    component: SplashScreenComponent 
+  },
   {
     path: 'home',
     loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
-  },
-  {
-    path: '',
-    redirectTo: 'login',
-    pathMatch: 'full'
   },  
   {
     path: 'login',

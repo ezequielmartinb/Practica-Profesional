@@ -1,27 +1,37 @@
-<ion-header *ngIf="usuario != null">
-  <ion-toolbar color="primary">
-    <ion-title>Home</ion-title>
-    <ion-buttons slot="end">
-      <ion-button color="danger" (click)="logout()">
-        <ion-icon name="log-out" slot="icon-only"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<ion-app>
+  <ion-header *ngIf="usuario != null">
+    <ion-toolbar color="primary">
+      <ion-title>Home</ion-title>
+      <ion-buttons slot="end">
+        <ion-button color="danger" (click)="logout()">
+          <ion-icon name="log-out" slot="icon-only"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
 
-<ion-tabs>
-  <ion-tab-bar slot="bottom">
-    <ion-tab-button *ngIf="usuario" tab="home" href="/home">
-      <ion-icon aria-hidden="true" name="home"></ion-icon>
-      <ion-label>Home</ion-label>
-    </ion-tab-button>
-   <ion-tab-button *ngIf="usuario==null" tab="login" href="/login">
-      <ion-icon aria-hidden="true" name="key"></ion-icon>
-      <ion-label>Login</ion-label>
-    </ion-tab-button>
-    <ion-tab-button *ngIf="usuario==null" tab="registro" href="/registro">
-      <ion-icon aria-hidden="true" name="document-text"></ion-icon>
-      <ion-label>Registro</ion-label>
-    </ion-tab-button>    
-  </ion-tab-bar> 
-</ion-tabs>
+  <!-- Splash visual -->
+  <app-splash-screen *ngIf="mostrarSplashVisual"></app-splash-screen>
+
+  <!-- Contenido principal -->
+  <ion-router-outlet *ngIf="!mostrarSplashVisual"></ion-router-outlet>
+
+  <!-- Tabs solo si no estoy en splash -->
+  <ion-tabs *ngIf="!mostrarSplashVisual && router.url !== '/'">
+    <ion-tab-bar slot="bottom">
+      <ion-tab-button *ngIf="usuario" tab="home" href="/home">
+        <ion-icon aria-hidden="true" name="home"></ion-icon>
+        <ion-label>Home</ion-label>
+      </ion-tab-button>
+      <ion-tab-button *ngIf="usuario == null" tab="login" href="/login">
+        <ion-icon aria-hidden="true" name="key"></ion-icon>
+        <ion-label>Login</ion-label>
+      </ion-tab-button>
+      <ion-tab-button *ngIf="usuario == null" tab="registro" href="/registro">
+        <ion-icon aria-hidden="true" name="document-text"></ion-icon>
+        <ion-label>Registro</ion-label>
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-tabs>
+
+</ion-app>

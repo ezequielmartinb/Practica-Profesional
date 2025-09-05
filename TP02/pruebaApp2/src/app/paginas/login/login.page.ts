@@ -23,7 +23,6 @@ export class LoginPage {
 
   errorMessage: string = '';
   usuariosDemo: any[] = [];
-  isLoading:boolean = false;
   isLoadingUsuarios:boolean = false;
   
 
@@ -69,7 +68,6 @@ export class LoginPage {
   async submit() {
     const { email, password } = this.form.getRawValue();
     const loader = await this.presentLoader('Iniciando sesión...');
-    this.isLoading = true;
 
     try {
       if (!email || !password) {

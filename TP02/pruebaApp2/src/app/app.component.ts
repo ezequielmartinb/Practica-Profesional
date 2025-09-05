@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from './servicios/auth-service';
 import { Router } from '@angular/router';
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { Capacitor } from '@capacitor/core';
+import { SplashScreenComponent } from './components/splash-screen/splash-screen.component';
 
 
 @Component({
@@ -12,45 +13,39 @@ import { Capacitor } from '@capacitor/core';
   styleUrls: ['app.component.scss'],
   standalone: false,
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
   
   usuario: string | null = null;
+  mostrarSplashVisual = true;
 
-  constructor(private auth:AuthService, private router: Router) 
-  {
-    this.showSplash();
+  constructor(private auth: AuthService, public router: Router) {
     this.configureStatusBar();
   }
 
-  async configureStatusBar() {
-    if (Capacitor.isNativePlatform()) {
-      try {
-        await StatusBar.setOverlaysWebView({ overlay: false });
-        await StatusBar.setStyle({ style: Style.Light });
-        await StatusBar.setBackgroundColor({ color: '#ffffff' });
-      } catch (_) {
-        console.warn('StatusBar no disponible en esta plataforma');
-      }
-    }    
-  }
-  
-  
-  ngOnInit() {
+  async ngOnInit() {
+    // Ocultar splash nativo
+    await SplashScreen.hide();
+
+    // Mostrar splash visual por 3 segundos
+    setTimeout(() => {
+      this.mostrarSplashVisual = false;
+    }, 3000);
+
+    // Suscribirse al estado del usuario
     this.auth.usuario$.subscribe(email => {
       this.usuario = email;
-    });   
+    });
   }
-  
+
+  async configureStatusBar() {
+    await StatusBar.setOverlaysWebView({ overlay: false });
+    await StatusBar.setBackgroundColor({ color: '#ffffff' });
+    await StatusBar.setStyle({ style: Style.Dark });
+  }  
+
   logout() {
     this.auth.logout();
     this.router.navigate(['/login']);
-  }
-  async showSplash()
-  {
-    await SplashScreen.show({
-      autoHide: true,
-      showDuration: 3000
-    });
   }
 
 }
